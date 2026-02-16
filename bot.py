@@ -4,7 +4,7 @@ from aiohttp import web
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-TOKEN = os.getenv("8230573234:AAHdyf9Ai5h0WjGJ1BmghGJFD5ohAim4K14")
+TOKEN = os.getenv("BOT_TOKEN")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Бот работает 24/7.")
@@ -39,3 +39,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
