@@ -14,14 +14,20 @@ async def handle(request):
     data = await request.json()
     update = Update.de_json(data, app.bot)
     await app.process_update(update)
-    return web.Response()
+    return web.Response(text="ok")
 
 async def main():
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
 
     await app.initialize()
-    await app.bot.set_webhook(os.getenv("RENDER_EXTERNAL_URL"))
+
+    # Получаем URL Render
+    render_url = os.getenv("RENDER_EXTERNAL_URL")
+
+    # Устанавливаем webhook с явным путем
+    await app.bot.set_webhook(url=f"{render_url}/")
+
     await app.start()
 
     web_app = web.Application()
@@ -29,6 +35,7 @@ async def main():
     web_app.router.add_post("/", handle)
 
     port = int(os.environ.get("PORT", 10000))
+
     runner = web.AppRunner(web_app)
     await runner.setup()
     site = web.TCPSite(runner, "0.0.0.0", port)
@@ -39,4 +46,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
